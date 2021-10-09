@@ -1,0 +1,149 @@
+.App {
+  text-align: center;
+}
+
+.myStyle {
+  margin: 0px auto;
+  width: 464px;
+  padding-top: 5px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 0px 19px 19px;
+  border: 1px solid grey;
+  border-top: 0px;
+  margin-right: 0px;
+}
+
+.myStyle3 {
+  margin: 10px auto;
+  width: 30%;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 19px;
+}
+.boxStyle {
+  width: 70%;
+  height: auto;
+  display: flex;
+  align: center;
+  justify-content: flex-start;
+  margin: 1px auto;
+  flex-direction:row;
+  border-radius: 19px;
+  position: relative;
+  overflow: hidden; 
+  border: 1px solid grey;
+}
+.boxStyle1 {
+  width: 50%;
+  height: auto;
+  display: flex;
+  align: center;
+  margin: 50px auto;
+  padding: 40px;
+  flex-direction: column;
+  border-radius: 19px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid grey;
+}
+.boxStyle2 {
+  display: flex;
+  align: center;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid grey;
+}
+.boxStyle3 {
+  width: 464px;
+  height: auto;
+  display: flex;
+  flex-direction: 'row';
+  justify-content: space-between;
+  align: center;
+  margin: 0px auto;
+  margin-top: 10px;
+  margin-right: 0px;
+}
+.myStyle1 {
+  margin: 10px 30px;
+  width: 30%;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 19px;
+}
+
+.myButton {
+  background-color:#4CAF50; 
+  border: none;
+  margin: 10px 30px;
+  color: white;
+  padding: 5px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.textField{
+  width: 120px;
+}
+
+.flexClass{
+  display: flex;
+  justify-content: space-between;
+}
+.margin{
+  margin-top:50px;
+}
+.center{
+  text-align: center;
+}
+
+.tabStyle{
+  text-align: center;
+  width: 25%;
+  padding: 5px;
+  border: 1px solid grey;
+}
+.activeTab{
+  border-bottom: 0px;
+}
+
+.reverseCoin{
+  width: 5%;
+  text-align: center;
+  display: flex;
+  align: center;
+  margin: 40px auto;
+  position: relative;
+  background-color:yellowgreen;
+  border: 1px solid grey;
+}
+
+.connectBtn{
+  position: absolute;
+  right: 50px;
+  top: 30px;
+}
+
+.details{
+  padding: 15px;
+}
+.centerBody{
+  display: flex;
+}
+.centerContainer{
+  width: 70%;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
