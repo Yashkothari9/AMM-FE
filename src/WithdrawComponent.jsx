@@ -16,15 +16,15 @@ export default function WithdrawComponent( props ){
         //ToDO;
     }
     return (
-        <div class ="myStyle">
+        <div class ="tabBody">
             <BoxTemplate 
                 leftHeader = {"Amount:"} 
-                right = {<div onClick = {() => getMaxShare()}>Max</div>} 
+                right = {<div onClick = {() => getMaxShare()} className="getMax" >Max</div>} 
                 value = {amountOfShare}
                 onChange = {(e) => onChangeAmountOfShare(e)}
             />
             <div class ="myStyle3">
-                <div class ="myButton" onClick = {() => withdrawShare()}>Withdraw</div>
+                <div class ="btn" onClick = {() => withdrawShare()}>Withdraw</div>
             </div>
         </div>
         

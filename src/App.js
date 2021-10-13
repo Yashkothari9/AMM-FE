@@ -1,19 +1,23 @@
 import { ethers } from "ethers";
-import { abi, CONTRACT_ADDRESS } from "./Constants";
-import Container from './Container';
 import { useState } from "react";
-import './App.css';
+import { abi, CONTRACT_ADDRESS } from "./Constants";
+import Container from "./Container";
+import "./App.css";
 
+export default function App() {
 
-function App() {
 	const [myContract, setMyContract] = useState(null);
+	const [address, setAddress] = useState();
+
+	let provider, signer, add; 
 	
-	let provider, signer; 
 	async function connect() {
 		let res = await connectToMetamask();
 		if( res === true ) {
 			provider = new ethers.providers.Web3Provider(window.ethereum);
 			signer = provider.getSigner();
+			add = await signer.getAddress();
+			setAddress(add);
 			try {
 				const contract = new ethers.Contract(
 					CONTRACT_ADDRESS,
@@ -21,7 +25,6 @@ function App() {
 					signer,
 				);
 				setMyContract(contract);
-				console.log("---------contract", contract);
 			} catch (err) {
 				alert("CONTRACT_ADDRESS not set properly");
 			}
@@ -40,13 +43,13 @@ function App() {
 	}
 
 	return (
-    	<div>
+    	<div className = "pageBody">
 			<div className = "navBar"> 
-       			<h1  style={{textAlign: "center"}}> AMM </h1>
+       			<div className = "appName"> AMM </div>
 				{	myContract === null ?
-			   		<div className = "connectBtn myButton" onClick = {() => connect()}>Connect to metamask</div>
+			   		<div className = "connectBtn" onClick = {() => connect()}> Connect to Metamask </div>
 					:
-					<div className = "connectBtn">Connected</div>
+					<div className = "connected"> {"Connected to " + address} </div>
 				}
 			</div>
 			<Container 
@@ -55,6 +58,4 @@ function App() {
 			/>
     	</div>
   	);
-}
-
-export default App;
+} 

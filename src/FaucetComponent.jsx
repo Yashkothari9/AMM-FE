@@ -1,42 +1,47 @@
-import { resolveProperties } from '@ethersproject/properties';
 import { useState } from 'react';
 import './App.css';
 import BoxTemplate from './BoxTemplate';
-import { PRECISION, RE } from './Constants';
+import { PRECISION } from './Constants';
 
 
 export default function FaucetComponent( props ){
     const [amountOfKar, setAmountOfKar] = useState(0);
     const [amountOfKothi, setAmountOfKothi] = useState(0);
 
-    const onChangeAmountOfKothi = (e) => {
-        if( e.target.value === "" || RE.test(e.target.value) ) {   
-            setAmountOfKothi(e.target.value);
-        }
+    const onChangeAmountOfKothi = (e) => {   
+        setAmountOfKothi(e.target.value);
     }
 
     const onChangeAmountOfKar = (e) => {
-        if( e.target.value === "" || RE.test(e.target.value) ) { 
             setAmountOfKar(e.target.value);
-        }
     }
 
     async function onClickFund() {
-        
+        console.log("fund");
         if( props.contract === null ) {
             alert("Connect to Metamask");
             return;
         }
-        if( amountOfKothi !== '' && amountOfKar !== '' )
-            await props.contract.faucet(amountOfKar * PRECISION, amountOfKothi * PRECISION);
-        else 
+        if( amountOfKothi !== '' && amountOfKar !== '' ) {
+            try {
+                await props.contract.faucet(amountOfKar * PRECISION, amountOfKothi * PRECISION);   
+                setAmountOfKar(0);
+                setAmountOfKothi(0);
+                alert("Success"); 
+            } catch (err) {
+                err?.data?.message && 
+                alert(err?.data?.message);
+                console.log(err);
+            }
+        } else { 
             alert("Amount cannot be empty");
+        }
 
     }
 
 
     return (
-        <div class ="myStyle">
+        <div class ="tabBody">
             <BoxTemplate 
                 leftHeader = {"Amount of KAR"} 
                 right = {"KAR"} 
@@ -50,7 +55,7 @@ export default function FaucetComponent( props ){
                 onChange ={(e) => onChangeAmountOfKothi(e)}
             />
             <div class ="myStyle3">
-                <div class ="myButton" onClick = {() => onClickFund()}>Fund</div>
+                <div class ="btn" onClick = {() => onClickFund()}>Fund</div>
             </div>
         </div>
     );

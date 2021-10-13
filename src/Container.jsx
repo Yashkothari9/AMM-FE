@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import SwapComponent from './SwapComponent';
 import ProvideComponent from './ProvideComponent';
@@ -11,15 +11,14 @@ export default function Container(props) {
     const [activeTab, setActiveTab] = useState("Swap");
     const [amountOfKAR, setAmountOfKAR] = useState(0);
     const [amountOfKOTHI, setAmountOfKOTHI] = useState(0);
+    const [amountOfShare, setAmountOfShare] = useState(0);
 
-    console.log("Contract in Container", props.contract);
-    
     async function getHoldings() {
         try {
             let response = await props.contract.getMyHoldings();
             setAmountOfKAR(parseFloat(response.amountToken1) / PRECISION);
             setAmountOfKOTHI(parseFloat(response.amountToken2) / PRECISION);
-            console.log("---Holdings", parseInt(response.amountToken1));
+            setAmountOfShare(parseFloat(response.myShare) / PRECISION);
         } catch (err) {
             console.log("Couldn't Fetch holdings", err);
         }
@@ -33,7 +32,7 @@ export default function Container(props) {
     return (
         <div className = "centerBody">
             <div className = "centerContainer">
-                <div className="boxStyle3">
+                <div className="selectTab">
                     <div class ={"tabStyle " + (activeTab === "Swap" ? "activeTab" : "")} onClick = {() => changeTab("Swap")}>Swap</div>
                     <div class ={"tabStyle " + (activeTab === "Provide" ? "activeTab" : "")} onClick = {() => changeTab("Provide")}>Provide</div>
                     <div class ={"tabStyle " + (activeTab === "Withdraw" ? "activeTab" : "")}onClick = {() => changeTab("Withdraw")}>Withdraw</div>
@@ -46,10 +45,23 @@ export default function Container(props) {
                 { activeTab === "Faucet" && <FaucetComponent contract = {props.contract} connect = {() => props.connect()} getHoldings = {() => getHoldings()}/>}
             </div>
             <div className = "details">
-                Amount of KAR: {amountOfKAR}
-                <br/>
-                Amount of KOTHI: {amountOfKOTHI}
-                <br/>
+                <div className = "detailsBody">
+                    <div className = "detailsHeader">
+                        Details
+                    </div>
+                    <div className = "detailsRow">
+                        <div className = "detailsAttribute">Amount of KAR:</div>
+                        <div className = "detailsValue">{amountOfKAR}</div>
+                    </div>
+                    <div className = "detailsRow">
+                        <div className = "detailsAttribute">Amount of KOTHI:</div>
+                        <div className = "detailsValue">{amountOfKOTHI}</div>
+                    </div>
+                    <div className = "detailsRow">
+                        <div className = "detailsAttribute">Your Share:</div>
+                        <div className = "detailsValue">{amountOfShare}</div>
+                    </div>
+                </div>
             </div>
         </div>
     );

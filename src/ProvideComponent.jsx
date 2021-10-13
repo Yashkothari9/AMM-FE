@@ -2,28 +2,67 @@ import { MdAdd} from 'react-icons/md';
 import { useState } from 'react';
 import './App.css';
 import BoxTemplate from './BoxTemplate';
+import { PRECISION } from './Constants';
 
 export default function ProvideComponent( props ){
     const [amountOfKar, setAmountOfKar] = useState(0);
     const [amountOfKothi, setAmountOfKothi] = useState(0);
+    const [error, setError] = useState("");
+
+    const getProvideEstimate = async (token, e) => {
+        if (props.contract !== null) {
+            try {
+                let estimate;
+                if (token === "KAR") {
+                    estimate = await props.contract.getEquivalentToken2Estimate(e.target.value * PRECISION);
+                    setAmountOfKothi(estimate / PRECISION);
+                } else {
+                    estimate = await props.contract.getEquivalentToken1Estimate(e.target.value * PRECISION);
+                    setAmountOfKar(estimate / PRECISION);
+                }
+            } catch (err) {
+                if (err.data.message === "execution reverted: Zero Liquidity") {
+                    setError("Message: Zero liquidity");
+                } else {
+                    alert(err?.data?.message);
+                }
+            }
+        }   
+    }
+
     const onChangeAmountOfKar = (e) => {
         setAmountOfKar(e.target.value);
+        getProvideEstimate("KAR", e);
     }
     const onChangeAmountOfKothi = (e) => {
         setAmountOfKothi(e.target.value);
+        getProvideEstimate("KOTHI", e);
     }
 
-    const provide= () => {
-        //ToDo: Call Blockchain
+    const provide = async () => {
+        if (props.contract === null) {
+            alert("Connect to Metamask");
+            return;
+        } else {
+            try {
+                await props.contract.provide(amountOfKar * PRECISION, amountOfKothi * PRECISION);
+                setAmountOfKar(0);
+                setAmountOfKothi(0);
+                alert("Success");
+            } catch (err) {
+                err &&
+                alert(err?.data?.message);
+            }
+        }
     }
     return (
-        <div class ="myStyle">
+        <div className ="tabBody">
             <BoxTemplate 
                 leftHeader = {"Amount of KAR"}
                 value = {amountOfKar}
                 onChange = {(e) => onChangeAmountOfKar(e)}
             />
-                <div class ="reverseCoin">
+                <div className ="swapIcon">
                     <MdAdd />
                 </div>
             <BoxTemplate 
@@ -31,8 +70,11 @@ export default function ProvideComponent( props ){
                 value = {amountOfKothi}
                 onChange = {(e) => onChangeAmountOfKothi(e)}
             />
-            <div class ="myStyle3">
-                <div class ="myButton" onClick = {() => provide()}>Provide</div>
+            <div className = "error">
+                {error}
+            </div>
+            <div className ="myStyle3">
+                <div className ="btn" onClick = {() => provide()}>Provide</div>
             </div>
         </div>
     );
