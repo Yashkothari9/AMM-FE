@@ -1,4 +1,4 @@
-import './App.css';
+import './Styles.css';
 import { RE } from './Constants'; 
 
 export default function BoxTemplate(props) {

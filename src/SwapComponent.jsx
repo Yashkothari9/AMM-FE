@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MdSwapVert } from "react-icons/md";
-import './App.css';
+import './Styles.css';
 import BoxTemplate from './BoxTemplate';
 import { PRECISION } from './Constants';
 
@@ -14,23 +14,24 @@ export default function SwapComponent( props ){
     }
     
     const getSwapEstimate = async ( setValue, val ) => {
+        if (['','.'].includes(val)) return;
         if ( props.contract !== null ) {
             if ( coin[0] === "KAR" ) {
                 try {
-                    let estimateOfAmountTo = await props.contract.getSwapToken1Estimate( val.target.value * PRECISION );
+                    let estimateOfAmountTo = await props.contract.getSwapToken1Estimate( val * PRECISION );
                     setValue( estimateOfAmountTo / PRECISION );
                 } catch (err) {
-                    alert(err.data.message);
-                    console.log(err.data.message);
+                    alert(err?.data?.message);
+                    console.log("kar",err?.data?.message,val, typeof val);
                 }
-
             } else {
                 try {
-                    let estimateOfAmountTo = await props.contract.getSwapToken2Estimate( val.target.value * PRECISION );
+                    let estimateOfAmountTo = await props.contract.getSwapToken2Estimate( val * PRECISION );
                     setValue( estimateOfAmountTo / PRECISION );
 
                 } catch (err) {
-                    alert(err.data.message);
+                    alert(err?.data?.message);
+                    console.log(err?.data?.message);
                 }
             }
         }
@@ -38,15 +39,19 @@ export default function SwapComponent( props ){
 
     const onChangeAmtFrm = (val) => {
         setAmountFrom(val.target.value);
-        getSwapEstimate(setAmountTo, val);
+        getSwapEstimate(setAmountTo, val.target.value);
     }
     
     const onChangeAmtTo = (val) => {
         setAmountTo(val.target.value);
-        getSwapEstimate(setAmountFrom, val);
+        getSwapEstimate(setAmountFrom, val.target.value);
     }
 
     const onSwap = async () => {
+        if (['','.'].includes(amountFrom)) {
+            alert("Amount should be a valid number");
+            return;
+        }
         if (props.contract === null) {
             alert("Connect to Metamask");
             return;
@@ -54,27 +59,29 @@ export default function SwapComponent( props ){
             try {
                 let response;
                 if (coin[0] === "KAR") {
-                    response = await props.contract.swapToken1(amountFrom);
+                    response = await props.contract.swapToken1(amountFrom * PRECISION);
                 } else { 
-                    response = await props.contract.swapToken2(amountFrom);
+                    response = await props.contract.swapToken2(amountFrom * PRECISION);
                 }
+                await response.wait();
                 setAmountFrom(0);
                 setAmountTo(0);
-                console.log(response);
+                await props.getHoldings();
+                alert("Success!");
             } catch (err) {
-                alert(err.data.message);
+                alert(err?.data?.message);
             }
         }   
     }
     return (
-        <div class ="tabBody">
+        <div  className ="tabBody">
             <BoxTemplate 
                 leftHeader = {"From"} 
                 right = {coin[0]}
                 value = {amountFrom} 
                 onChange = {(e) => onChangeAmtFrm(e)}
             />
-            <div class ="swapIcon" onClick={() => rev()}>
+            <div  className ="swapIcon" onClick={() => rev()}>
                     <MdSwapVert />
             </div>
             <BoxTemplate 
@@ -83,8 +90,8 @@ export default function SwapComponent( props ){
                 value = {amountTo} 
                 onChange = {(e) => onChangeAmtTo(e)}
             />
-            <div class ="myStyle3">
-                <div class ="btn" onClick = {() => onSwap()}>Swap</div>
+            <div  className ="bottomDiv">
+                <div  className ="btn" onClick = {() => onSwap()}>Swap</div>
             </div>
         </div>
     );

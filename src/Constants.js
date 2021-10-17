@@ -1,6 +1,6 @@
 
 export const PRECISION = 1000000;
-export const RE = /^[0-9\b]+$/;
+export const RE = /^[0-9]*[.]?[0-9]*$/;
 export const CONTRACT_ADDRESS = "0x1EE29B89d252723cfeA8a09491e1594A57Cb12e9";
 export const abi = [
 	{

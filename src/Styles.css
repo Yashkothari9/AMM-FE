@@ -15,7 +15,7 @@ html, body, .pageBody, #root {
   	margin-right: 0px;
 }
 
-.myStyle3 {
+.bottomDiv {
   	margin: 10px auto;
   	width: 30%;
   	padding: 5px;
@@ -210,12 +210,19 @@ svg {
 
 .details{
   	padding: 15px 10px 15px 0px;
-  	width: 500px;
+  	width: 370px;
   	height: fit-content;
   	position: absolute;
   	right: 0px;
   	display: flex;
   	justify-content: center;
+}
+
+.withdrawEstimate{
+	height: 30px;
+	width: 75%;
+	margin: 10px auto;
+	color: white;
 }
 
 .detailsBody{
@@ -289,7 +296,7 @@ svg {
 	padding: 0px 20px;
 }
 
-@media only screen and (max-width: 1600px) {
+@media only screen and (max-width: 1100px) {
 	.centerBody{
 		display: block;
 	}

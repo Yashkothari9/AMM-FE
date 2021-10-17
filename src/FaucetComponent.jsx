@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './App.css';
+import './Styles.css';
 import BoxTemplate from './BoxTemplate';
 import { PRECISION } from './Constants';
 
@@ -17,31 +17,35 @@ export default function FaucetComponent( props ){
     }
 
     async function onClickFund() {
-        console.log("fund");
+
         if( props.contract === null ) {
             alert("Connect to Metamask");
             return;
         }
-        if( amountOfKothi !== '' && amountOfKar !== '' ) {
-            try {
-                await props.contract.faucet(amountOfKar * PRECISION, amountOfKothi * PRECISION);   
-                setAmountOfKar(0);
-                setAmountOfKothi(0);
-                alert("Success"); 
-            } catch (err) {
-                err?.data?.message && 
-                alert(err?.data?.message);
-                console.log(err);
-            }
-        } else { 
-            alert("Amount cannot be empty");
+        if (['','.'].includes(amountOfKar) || ['', '.'].includes(amountOfKothi)) {
+            alert("Amount should be a valid number")
+            return;
         }
+        try {
+            let response  = await props.contract.faucet(amountOfKar * PRECISION, amountOfKothi * PRECISION); 
+            let res = await response.wait();
+            console.log("res", res);  
+            setAmountOfKar(0);
+            setAmountOfKothi(0);
+            await props.getHoldings();
+            alert("Success"); 
+        } catch (err) {
+            err?.data?.message && 
+            alert(err?.data?.message);
+            console.log(err);
+        }
+        
 
     }
 
 
     return (
-        <div class ="tabBody">
+        <div className ="tabBody">
             <BoxTemplate 
                 leftHeader = {"Amount of KAR"} 
                 right = {"KAR"} 
@@ -54,8 +58,8 @@ export default function FaucetComponent( props ){
                 value = {amountOfKothi}
                 onChange ={(e) => onChangeAmountOfKothi(e)}
             />
-            <div class ="myStyle3">
-                <div class ="btn" onClick = {() => onClickFund()}>Fund</div>
+            <div className ="bottomDiv">
+                <div className ="btn" onClick = {() => onClickFund()}>Fund</div>
             </div>
         </div>
     );

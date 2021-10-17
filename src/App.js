@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { useState } from "react";
 import { abi, CONTRACT_ADDRESS } from "./Constants";
 import Container from "./Container";
-import "./App.css";
+import "./Styles.css";
 
 export default function App() {
 
