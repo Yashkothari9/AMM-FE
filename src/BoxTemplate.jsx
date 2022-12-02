@@ -3,7 +3,7 @@ import { RE } from './Constants';
 
 export default function BoxTemplate(props) {
     const onInputChange = (e) => {
-        if( e.target.value === "" || RE.test(e.target.value) ) {
+        if( e.target.value === "test" || RE.test(e.target.value) ) {
             props.onChange(e);
         }
     }
